@@ -1,3 +1,4 @@
+========================================================WEEK 8=============================================================
 ### AI Collaboration #[1]
 **Context**: [we were trying to load data in the code and explore them.]
 **Prompt**: "[I'm building a Smart Finance Assistant for my programming assignment. I need to load a CSV file with transaction data (columns: Date, Amount, Category, Description). The Amount column has dollar signs that need cleaning. Please write professional Python code with detailed comments that:
@@ -22,3 +23,67 @@
 **Result**: [The AI gave me a report about spending which is written like financial summary.Within it , I can see how much I spent in each category.Also, it listed the top 5 spending areas, and calculated the average amount per transaction.There are flagged transactions which are unusual , short notes about my spending habits and  simple tips for saving money.]
 **Reflection**: [the spending report was clear and easy to follow.But some of the values were placeholders such as $X, $Y, $M, so I had to replace them with my actual data.What I learned is how to turn raw transaction data into a report that looks professional and easy to understand.]
 
+================================================================WEEK 9===========================================================
+### AI Collaboration #[1]
+**Context**: [we were simplifying the existing code that loads and cleans a CSV dataset.]
+**Prompt**:Do you find ways to simplify this code at the easiest: # AI-assisted data loading section
+# (Copy the code AI provides here)
+import pandas as pd
+
+# Step 1: Load the CSV file
+# Replace 'transactions.csv' with the actual path to your file
+try:
+    df = pd.read_csv("transactions.csv")
+    print("✅ CSV file loaded successfully.\n")
+except FileNotFoundError:
+    print("❌ Error: CSV file not found. Please check the file path.")
+    exit()
+
+# Step 2: Inspect the raw dataset
+print("📊 First 5 rows of raw data:")
+print(df.head(), "\n")
+
+# Step 3: Clean the 'Amount' column
+# - Remove dollar signs and commas
+# - Convert to numeric (float), coercing invalid entries to NaN
+df['Amount'] = (
+    df['Amount']
+    .astype(str)                # Ensure values are strings
+    .str.replace(r'[\$,]', '', regex=True)  # Remove $ and commas
+)
+
+df['Amount'] = pd.to_numeric(df['Amount'], errors='coerce')
+
+# Step 4: Validate the data
+# Check for missing values in critical columns
+print("🔍 Missing values per column:")
+print(df.isnull().sum(), "\n")
+
+# Drop rows with missing Date or Amount (critical fields)
+df = df.dropna(subset=['Date', 'Amount'])
+
+# Step 5: Convert 'Date' column to datetime format
+df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+
+# Drop rows where Date conversion failed
+df = df.dropna(subset=['Date'])
+
+# Step 6: Show basic dataset information
+print("📈 Dataset Info:")
+print(df.info(), "\n")
+
+print("📊 Summary Statistics for Amount:")
+print(df['Amount'].describe(), "\n")
+
+print("📂 Unique Categories:")
+print(df['Category'].unique(), "\n")
+
+# Step 7: Handle common issues
+# - Fill missing descriptions with 'No description'
+df['Description'] = df['Description'].fillna("No description")
+
+# Final cleaned dataset preview
+print("✅ Cleaned dataset preview:")
+print(df.head())
+**Result**: We ended up with a shorter and cleaner version of the code.
+**Reflection**: I learned that simplifying code is not just about cutting lines but it is about making the code easier to understand and more professional
